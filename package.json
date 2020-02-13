@@ -1,33 +1,29 @@
 {
-  "name": "IlamTeaGardenFinalAPI",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "nodemon --ignore ./public/uploads index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "test": "jest --watchAll"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/maharjansumina/AirlineReservationSystem-API.git"
-  },
-  "keywords": [],
-  "author": "Sumina Maharjan",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/maharjansumina/AirlineReservationSystem-API/issues"
-  },
-  "homepage": "https://github.com/maharjansumina/AirlineReservationSystem-API#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.11",
+    "debug": "^4.1.1",
+    "express": "^4.17.0",
+    "express-session": "^1.16.1",
+    "mongoose": "^5.5.11",
     "morgan": "^1.9.1",
-    "multer": "^1.4.2",
-    "nodemon": "^2.0.2"
+    "multer": "^1.4.1",
+    "nodemon": "^1.19.4",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^5.0.1",
+    "path": "^0.12.7",
+    "session-file-store": "^1.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "author": "Asna Thapa",
+  "license": "ISC"
 }

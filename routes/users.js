@@ -1,68 +1,92 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/users');
-const router = express.Router();
-const auth = require('../auth');
+var express = require('express');
+var User = require('../models/User');
+var passport = require('passport');
 
-router.post('/register', (req, res, next) => {
-    let password = req.body.password;
-    bcrypt.hash(password, 10, function (err, hash) {
+var router = express.Router();
+
+router.post('/signup', (req, res, next) => {
+    User.register(new User(req.body),
+      req.body.password, (err, user) => {
         if (err) {
-            let err =  new Error('Could not hash!');
-		err.status = 500;
-		return next(err);
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          res.json({ err: err });
         }
-        User.create({
-            fullname: req.body.fullname,
-            address: req.body.address,
-            phone: req.body.phone,
-            email: req.body.email,
-            password: hash,
-            conpassword: hash,
-            image: req.body.image
-        }).then((user) => {
-            let token = jwt.sign({ _id: user._id }, process.env.SECRET);
-            res.json({ status: "Registered Successfully!", token: token });
-        }).catch(next);
+        else {
+          passport.authenticate('local')(req, res, () => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({ success: true, status: 'Registration Successful!' });
+          });
+        }
+      });
+  });
+
+  router.post('/login', passport.authenticate('local'), (req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ success: true, status: 'You are successfully logged in!', usertype:req.user.admin, user: req.user._id });
+  });
+
+  router.get('/logout', (req, res, next) => {
+    if (req.user) {
+      req.session.destroy();
+      res.clearCookie('session-id');
+      res.statusCode = 200 ;
+      res.send("You are logged out");
+      res.end ();
+    }
+     
+     else {
+      let err = new Error('You are not logged in!');
+      err.status = 403;
+      next(err);
+    }
+  });
+
+  router.get("/", (req, res) => {
+    User.find(function(err, user) {
+         if (err) {
+             console.log(err);
+         } else {
+             res.json(user);
+         }
+     });
+ });
+
+ router.route('/:id')
+    .get((req, res, next) => {
+        User.findById(req.params.id)
+            .then((user) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post((req, res, next) => {
+        res.statusCode = 403;
+        res.end("POST operation not supported!");
+    })
+    .put((req, res, next) => {
+        User.findByIdAndUpdate(req.params.id,
+             { $set: req.body }, 
+             { new: true, useFindAndModify: false })
+            .then((user) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete((req, res, next) => {
+        User.findByIdAndDelete(req.params.id)
+            .then((user) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user);
+            }, (err) => next(err))
+            .catch((err) => next(err));
     });
-});
-
-router.post('/login', (req, res, next) => {
-    User.findOne({ email: req.body.email })
-        .then((user) => {
-            if (user == null) {
-                let err = new Error('User not found!');
-                err.status = 401;
-                return next(err);
-            } else {
-                bcrypt.compare(req.body.password, user.password)
-                    .then((isMatch) => {
-                        if (!isMatch) {
-                            let err = new Error('Password does not match!');
-                            err.status = 401;
-                            return next(err);
-                        }
-                        let token = jwt.sign({ _id: user._id }, process.env.SECRET);
-                        res.json({ status: 'Login success!', token: token });
-                    }).catch(next);
-            }
-        }).catch(next);
-})
-
-router.get('/me',auth.verifyUser,(req,res,next)=>{
-    User.findById({_id:req.user._id})
-    .then((result)=>{
-        res.json(result)
-    })
-    .catch(next)
-})
-router.get('/user',auth.verifyUser,(req,res,next)=>{
-    User.find({admin:false})
-    .then((result)=>{
-        res.json(result)
-    })
-    .catch(next)
-})
-
-module.exports = router;
+  
+  module.exports = router;
