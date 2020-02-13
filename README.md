@@ -1,15 +1,20 @@
 # Your Project Title Here
-Name: Asna Thapa
+Name: Sudarsan Udash
 
-CollegeID: 170112
+CollegeID: 170354
 
 Batch: Jan19A
 
 Brief description of the domain of your project!
-The project is developed to deal with the buyers and the sellers. The objects are the property of their respective owners.People can not only buy items likes furniture but also can buy and sell other electronic products, home appliances,cars,etc.People can post their items and view the items online.
+
+   Ilam Tea Garden is a project that focuses on commercializing the local products of Ilam which is located at the eastern part of our country. Everyone knows that Ilam
+   is famous for tea, lollipop, churpi and many other local products but not everyone has been fortunate enough to try the local products by themselves. This project targets
+   at providing a platform for easy accessibility of those products and also provide an economy boost to the economy of the local farmers and manufacturers in thye place. 
+   While most of the market of those local products is our neighbouring country India and are mostly performed manually, the target of this project is provide a nepali market
+   for those products.
 
 Aim
-The main aim of the project is to provide a simple platform for the users so that they can sell their used items online and buyers can purchase it easily in addition with the maximum utilization of the used products for the better use.
+The main aim of this project is to commercialize the local products of Ilam as well as provide the benefit for people all over the country to buy and enjoy the local products of the place
 
 Objectives
 To let people easily get access to the website and provide  user friendly platform.
